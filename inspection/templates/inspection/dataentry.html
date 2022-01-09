@@ -1,0 +1,105 @@
+{% extends "inspection/layout.html"%}
+{% load static%}
+{% block body %}
+
+<script>
+  let today = new Date();
+  let month = today.getMonth() + 1;
+  let year = today.getFullYear();
+  let date = today.getDate();
+  let today_date = `${year}-${month}-${date}`
+
+
+  function returndate() {
+    document.querySelector('#id_last_check').value = today_date
+    last_date = new Date(document.querySelector('#id_last_check').value)
+    if (document.querySelector("#id_vehicle_category").value == "bus" || document.querySelector("#id_vehicle_category").value == "truck") {
+      last_date.setMonth(month+6)
+      document.querySelector("#id_next_check").value = `${last_date.getFullYear()}-${last_date.getMonth() +1}-${last_date.getDate()}`
+    }
+    else {
+      last_date.setYear(year+1)
+      document.querySelector("#id_next_check").value = `${last_date.getFullYear()}-${last_date.getMonth() + 1}-${last_date.getDate()}`
+    }
+  };
+
+  function returnnext() {
+    let parts = document.querySelector('#id_last_check').value.split('-');
+    var last_date = new Date(parts[0], parts[1] - 1, parts[2]);
+    console.log(document.querySelector('#id_last_check').value)
+    console.log(last_date)
+    if (document.querySelector("#id_vehicle_category").value == "bus" || document.querySelector("#id_vehicle_category").value == "truck") {
+      last_date.setMonth(month+6)
+      document.querySelector("#id_next_check").value = `${last_date.getFullYear()}-${last_date.getMonth() +1}-${last_date.getDate()}`
+      console.log(last_date)
+    }
+    else {
+      last_date.setYear(year+1)
+      document.querySelector("#id_next_check").value = `${last_date.getFullYear()}-${last_date.getMonth() + 1}-${last_date.getDate()}`
+    }
+
+
+
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelector("#todaydate").onclick = returndate;
+    document.querySelector("#id_last_check").onfocusout = returnnext;
+  });
+
+
+</script>
+
+
+
+
+
+<form action="" method="post" class="bodylayout">
+  {% csrf_token %}
+  {{form.vehicle}}
+  {{form.status}}
+  {{form.user}}
+  <div class="form-group" class="form-control form-control-lg">
+    <label for="exampleFormControlInput1">Registration Plate</label>
+    {{form2.reg_number}}
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Category</label>
+    {{form2.vehicle_category}}
+  </div>
+  <div class="form-group" class="form-control form-control-lg" class="dateintervals">
+    <label for="exampleFormControlInput1">Start date of vehicle exploitation</label>
+    {{form2.start_expl}}
+  </div>
+  </div>
+  <div class="form-group" class="form-control form-control-lg">
+    <label for="exampleFormControlInput1">Telephone Number</label>
+    {{form.client_telnumber}}
+  </div>
+  <div class="form-group" class="form-control form-control-lg">
+    <label for="exampleFormControlInput1">Email Address (optional)</label>
+    {{form.email}}
+  </div>
+  <div class="form-group row">
+    <label for="staticEmail" class="col-sm-2 col-form-label" class="dateintervals" >Last inspection
+      date</label>
+    <div class="col-sm-10" >
+      {{form.last_check}}
+      <br>
+      <button type="button" id="todaydate" class="btn btn-outline-primary">Today</button>
+    </div>
+  </div>
+  <hr>
+  <div class="form-group row">
+    <label for="staticEmail" class="col-sm-2 col-form-label">Inspection valid until:</label>
+    <div class="col-sm-10">
+      {{form.next_check}}
+    </div>
+  </div>
+  <br>
+  <div class="col-md-3 text-center">
+    <input class="btn btn-primary btn-lg" type="submit" value="Submit Data Entry">
+  </div>
+
+</form>
+{% endblock %}
