@@ -15,5 +15,5 @@ Once the email request goes through the status value is updated to "Customer Not
 The user can filter by status to see if all the customers are notified successfully.
 
 ## Future Work
-Implement SMS notifications.    
+   
 Create a way for users to be able to resend notifications in cases where there is an error during notification process.
